@@ -1,0 +1,16 @@
+ul {width: 250px;}    
+.focus {background-color: aquamarine;}
+.input {width: 250px;height: 24px;box-sizing: border-box;}
+.wrapItems {position: relative;}
+.wrapItems + .wrapItems {margin-top: 30px;}
+.listExample {z-index:5;overflow:hidden;position: absolute;max-height: 0;top: 30px;background: #fff;}
+.listExample.active {max-height: 600px;}
+.multi_inner {width: 250px;font-size: 0;border: 1px solid #333;box-sizing: border-box;}
+.multi_inner .listSelected {display: inline-block;font-size: 0;text-align: left;}
+.multi_inner input {display: inline-block; border: none;}
+.multi_inner input:focus{outline: none;}
+.item_multi_selected {display: inline-block;padding: 0 5px;margin-left: 5px;font-size: 0; border: 1px solid #333;box-sizing: border-box;}
+.item_multi_selected .text {display: inline-block;font-size: 14px;}
+.item_multi_selected .btn_del {display: inline-block;font-size: 14px;color: tomato;border: none;background: transparent;}
+/* .item_multi_selected + .item_multi_selected {margin-left: 5px;} */
+.items {font-size: 14px;}

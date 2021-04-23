@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>    
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="wrapItems">
+        <input type="text" class="input">
+        <ul class="listExample" id='ul'>
+            <li class="js_item items"><span class="text">example_1</span></li>
+            <li class="js_item items"><span class="text">example_2</span></li>
+            <li class="js_item items"><span class="text">example_3</span></li>
+            <li class="js_item items"><span class="text">example_4</span></li>
+            <li class="js_item items"><span class="text">example_5</span></li>
+            <li class="js_item items"><span class="text">example_6</span></li>
+        </ul>
+    </div>
+    <div class="wrapItems">
+        <input type="text" class="input">
+        <ul class="listExample" id='ul'>
+            <li class="js_item items"><span class="text">example_1</span></li>
+            <li class="js_item items"><span class="text">example_2</span></li>
+            <li class="js_item items"><span class="text">example_3</span></li>
+            <li class="js_item items"><span class="text">example_4</span></li>
+            <li class="js_item items"><span class="text">example_5</span></li>
+        </ul>
+    </div>
+    <div class="wrapItems">
+        <div class="multi_inner">
+            <div class="listSelected">
+                <!-- 
+                <div class="item_multi_selected">
+                    <span class="text">text</span>
+                    <button class="btn_del">x</button>
+                </div>
+                
+                <div class="item_multi_selected">
+                    <span class="text">text</span>
+                    <button class="btn_del">x</button>
+                </div> -->
+            </div>
+            <input type="text" class="multi_input input" style="width: 100%;background-color: #ff0;">
+            
+            <ul class="listExample" id='ul'>
+                <li class="js_item_multi items"><span class="text">111</span></li>
+                <li class="js_item_multi items"><span class="text">222</span></li>
+                <li class="js_item_multi items"><span class="text">333</span></li>
+            </ul>
+        </div>
+    </div>
+    <div>
+        <h2>debouncing</h2>
+        <input type="text" class="input-de js_brand" value="">
+        <ul class="listExample" id='list_brand'>
+
+        </ul>
+    </div>
+</body>
+</html>
+
+<script src="./index.js"></script>
