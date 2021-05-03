@@ -63,15 +63,22 @@ inputs.forEach(function(input){
 window.addEventListener('keyup', function(event){
     if(event.keyCode === 40) { // Down Arrow key
         const on = document.querySelector('.on');
+        
         if(on.nextElementSibling.classList.contains('active')){
             const arr_li = Array.from(on.nextElementSibling.querySelectorAll('.focus'));
-            if(arr_li.length === 0) {
+            const items = Array.from(on.nextElementSibling.querySelectorAll('.js_item'));
+            const item_multies = Array.from(on.nextElementSibling.querySelectorAll('.js_item_multi'));
+            
+            if(arr_li.length === 0 && (items.length !== 0 || item_multies.length !==0)) { // single multi 출돌
                 on.nextElementSibling.firstElementChild.classList.add('focus');
             } else {
                 const forty = on.nextElementSibling.querySelector('.focus');
-                if(forty.nextElementSibling) {
-                    forty.classList.remove('focus');
-                    forty.nextElementSibling.classList.add('focus');
+                
+                if(forty !== null) {                    
+                    if(forty.nextElementSibling !== null) {
+                        forty.classList.remove('focus');                    
+                        forty.nextElementSibling.classList.add('focus');
+                    }
                 }
             }
         }
@@ -79,40 +86,72 @@ window.addEventListener('keyup', function(event){
     
     if (event.keyCode === 38){ // Up Arrow key
         const on = document.querySelector('.on');
+        
         if(on.nextElementSibling.classList.contains('active')){
             const forty = on.nextElementSibling.querySelector('.focus');
-            if(forty.previousElementSibling) {
-                forty.classList.remove('focus');
-                forty.previousElementSibling.classList.add('focus');
-            }
+            
+            if(forty !== null) {
+                if(forty.previousElementSibling !== null) {
+                    forty.classList.remove('focus');
+                    forty.previousElementSibling.classList.add('focus');
+                }
+            } 
         }
     }
     if (event.keyCode === 13) { // enter key
         const on = document.querySelector('.on');
         const stad = on.nextElementSibling.querySelector('.js_item.focus');
-        // .js_item_multi.focus
-        console.log(stad)
-        if(on !== null && stad !== null){
-            const text = stad.querySelector('.text').innerText;
-            on.value = text;
+        const staM = on.nextElementSibling.querySelector('.js_item_multi.focus');
+        
+        if(on !== null && (stad !== null || staM !== null)){
+            if(stad !== null) { // single input
+                const text = stad.querySelector('.text').innerText;
+                on.value = text;
+            } else if(staM !== null) { // multi input
+                const wrap = staM.closest('.wrapItems');
+                const listSelected = wrap.querySelector('.listSelected');
+                const text = staM.querySelector('.text').innerText;
+                const pendingElement = createList(text, listSelected);
+
+                listSelected.appendChild(pendingElement);
+                handleInput(wrap);
+            }
         }
     }
 });
 
-js_items.forEach(function(js_item){
-    js_item.addEventListener('click', function(event){
-        const wrap = event.currentTarget.closest('.wrapItems');
-        const items = wrap.querySelectorAll('.focus');
-        if(items.length > 0){
-            for(i=0; i<items.length; i++){
-                items[i].classList.remove('focus');
+function onListClick(js_items){
+    js_items.forEach(function(js_item){
+        js_item.addEventListener('click', function(event){
+            const wrap = event.currentTarget.closest('.wrapItems');
+            const items = wrap.querySelectorAll('.focus');
+            if(items.length > 0){
+                for(i=0; i<items.length; i++){
+                    items[i].classList.remove('focus');
+                }
             }
-        }
-        js_item.classList.add('focus');
-        wrap.querySelector('.input').value = event.currentTarget.querySelector('.text').innerText;
-        wrap.querySelector('.listExample').classList.remove('active');
-    })
-});
+            js_item.classList.add('focus');
+            wrap.querySelector('.input').value = event.currentTarget.querySelector('.text').innerText;
+            wrap.querySelector('.listExample').classList.remove('active');
+        })
+    });
+}
+
+function onListMultiClick(js_item_multies){
+    js_item_multies.forEach(function(js_item_multi){
+        js_item_multi.addEventListener('click',function(event){
+            const wrap = event.currentTarget.closest('.wrapItems');
+            const listSelected = wrap.querySelector('.listSelected');        
+            const target = event.currentTarget;
+            const text = target.querySelector('.text').innerText;
+            const pendingElement = createList(text, listSelected);
+            
+            listSelected.appendChild(pendingElement);
+            handleInput(wrap);
+        })
+    });
+}
+
 
 function handleInput(wrap){
     const multi_inner = wrap.querySelector('.multi_inner');
@@ -145,69 +184,6 @@ function createList(text, listSelected){
     });
     return item_selected;
 }
-
-js_item_multies.forEach(function(js_item_multi){
-    js_item_multi.addEventListener('click',function(event){
-        const wrap = event.currentTarget.closest('.wrapItems');
-        const listSelected = wrap.querySelector('.listSelected');        
-        const target = event.currentTarget;
-        const text = target.querySelector('.text').innerText;
-        const pendingElement = createList(text, listSelected);
-        
-        listSelected.appendChild(pendingElement);
-        handleInput(wrap);
-    })
-});
-
-// 여러개 붙이기
-// 1. 아래 형식으로 createElement, ul에 appendChild
-{/*
-<div class="listSelected">
-    <div class="item_multi_selected">
-        <span class="text">text</span>
-        <button class="btn_del">x</button>
-    </div>
-    <div class="item_multi_selected">
-        <span class="text">text</span>
-        <button class="btn_del">x</button>
-    </div>
-</div>
-*/}
-// 2. ul의 넓이를 구해서 input에 padding-left 주기
-// 3. x button 함수 달아주기
-
-// function createVisualList(text, js_visual_list) {		
-// 	var visualList = document.createElement("li");
-// 	var listText = document.createElement("span");
-// 	var DelBtn = document.createElement("button");
-
-// 	DelBtn.innerText = "❌";
-// 	listText.innerText = text;
-
-// 	visualList.className = 'item_visual';
-// 	listText.className = 'text_visual';
-// 	DelBtn.className = 'btn_delete';
-// 	visualList.appendChild(listText);
-// 	visualList.appendChild(DelBtn);
-
-// 	DelBtn.addEventListener("click", () => {
-// 		js_visual_list.removeChild(visualList);
-// 	});
-
-// 	return visualList;
-// }
-
-// function onVisualListClick(event){
-// 	var js_visual_list = document.querySelector(".js_visual_list");
-// 	var js_two_depthes = Array.from(document.querySelectorAll(".js_two_depth"));
-// 	var elm = event.target;
-// 	var text = elm.innerText;
-// 	const pendingElement = createVisualList(text ,js_visual_list);
-// 	js_visual_list.appendChild(pendingElement);
-// 	js_two_depthes.forEach(function(js_two_depthes){
-// 		js_two_depthes.style.display = "none";
-// 	});
-// }
 
 const api = axios.create({
     baseURL: "https://api.themoviedb.org/3/",
@@ -246,36 +222,126 @@ const debounce = (callback, milliseconds) => {
     }
 }
 
-const painter = (answers) => {    
-    console.log(answers.length)
-    if(answers.length !== 0) {
-        answers.forEach(function(answer){
-            console.log(answer.original_title);
-        });
+const onCreateList = (text, list, type) => {
+    let li = document.createElement('li');
+    let span = document.createElement('span');
+    
+    span.innerText = text;
+    if(type === 'single') {
+        li.className = 'js_item items';        
+    } else {
+        li.className = 'js_item_multi items';
+    }
+    span.className = 'text';
+    
+    li.appendChild(span);
+    list.appendChild(li);
+}
+
+const onCreateNoResult = (obj, list, type) => {
+    let li = document.createElement('li');
+    let span_text = document.createElement('span');
+    let span_no_result = document.createElement('span');
+
+    span_text.innerText = obj;
+    span_no_result.innerText = '직접입력';
+    if(type === 'single') {
+        li.className = 'js_item items';
+    } else {
+        li.className = 'js_item_multi items';
+    }
+    span_text.className = 'text';
+    span_no_result.className = 'text_no_result';
+
+    li.appendChild(span_text);
+    li.appendChild(span_no_result);
+    list.appendChild(li);
+}
+
+const painter = (answers, id, listExample, obj) => {
+    if(listExample.children.length !== 0){
+        while (listExample.firstChild) {
+            listExample.removeChild(listExample.firstChild);            
+        }
+    }
+    if(listExample.children.length === 0) {
+        let type_val;
+        if(id === 'js_brand') { // single input example
+            type_val = 'single';            
+        } else if(id === 'js_title'){ // multi input example
+            type_val = 'multi';
+        }
+        if(answers.length !== 0) {
+            answers.forEach(function(answer){                
+                if(id === 'js_brand'){ // single input example
+                    onCreateList(answer.original_title, listExample, type_val);                    
+                } else if(id === 'js_title'){ // multi input example
+                    onCreateList(answer.name, listExample, type_val);
+                }
+            });            
+        }
+        onCreateNoResult(obj, listExample, type_val);
+        
+        const js_items = Array.from(listExample.querySelectorAll('.js_item'));                
+        const js_item_multies = Array.from(listExample.querySelectorAll('.js_item_multi'));
+        onListMultiClick(js_item_multies);
+        onListClick(js_items);
     }
 }
-const getDataFromURL = async (obj) => {    
-    try {
-        const {
-            data: { results: movieResults }
-        } = await moviesApi.search(obj);
-        answers = movieResults;
-        painter(answers)
-        // const {
-        //     data: { results: companyResults }
-        // } = await CompaniesApi.search(obj);    
-        // console.log(companyResults);
+const getDataFromURL = async (obj ,id, listExample) => {    
+    try {        
+        if(id === 'js_brand') {
+            const {
+                data: { results: movieResults }
+            } = await moviesApi.search(obj);
+            answers = movieResults;
+        } else if(id === 'js_title'){
+            const {
+                data: { results: companyResults }
+            } = await CompaniesApi.search(obj);    
+            answers = companyResults;
+        }
+        painter(answers ,id, listExample, obj);
         
     } catch {
         console.log('error')
     } finally {
-        console.log('finally')
+        console.log('finally '+obj)
     }
 };
 
-const inputVal = document.querySelector('.input-de');
-inputVal.addEventListener('keyup', debounce(({ target }) => {    
-    if(target.value !== '') {
-        getDataFromURL(target.value);
+
+const inputVals = Array.from(document.querySelectorAll('.js_input_de'));
+inputVals.forEach(function(inputVal){
+    // inputVal.addEventListener('keyup', debounce(({ target }) => {        
+    //     const id_value = target.id;
+    //     const listExample = target.nextElementSibling;
+    //     if(target.value !== '') {
+    //         getDataFromURL(target.value, id_value, listExample);
+    //     }
+    // },500));
+    inputVal.addEventListener('keyup', debounce((event) => {
+        const target = event.target;
+        const id_value = target.id;
+        const listExample = target.nextElementSibling;
+        if(target.value !== '' && event.keyCode !== 13 && event.keyCode !== 37 && event.keyCode !== 38 && event.keyCode !== 39 && event.keyCode !== 40) {
+            getDataFromURL(target.value, id_value, listExample);
+        }
+    },500));
+});
+
+// https://image.tmdb.org/t/p/w300${imageUrl}
+
+const monarr = new Array(31,28,31,30,31,30,31,31,30,31,30,31);
+
+function getMonthDay(year, month) {
+    if ((((year % 4 == 0) && (year % 100 != 0)) || (year % 400 == 0)) && month==2) {
+        date = 29;
+    } else {
+        date = monarr[month-1];
     }
-},500));
+
+    return date;
+}
+
+// x = getMonthDay(2008,2);
