@@ -10,10 +10,17 @@
     <title>Document</title>
 </head>
 <body>
+    <div>
+        <input type="hidden" value="" id='js_brand_value' class="input_state">
+        <input type="hidden" value="" id='js_brand02_value' class="input_state">
+        
+        <input type="hidden" value="" id='js_brand_temp' class="input_temp">
+        <input type="hidden" value="" id='js_brand02_temp' class="input_temp">
+    </div>
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
         <div class="wrapItems">        
-            <input type="text" class="js_input_de input js_brand" value="" id='js_brand'>
+            <input type="text" class="js_input_de input js_brand js_single" value="" id='js_brand' autocomplete="off">
             <ul class="listExample" id='list_brand'>
                 <!-- <li class="js_item items"><span class="text">example_1</span></li>
                 <li class="js_item items"><span class="text">example_2</span></li>
@@ -27,8 +34,8 @@
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
         <div class="wrapItems">        
-            <input type="text" class="js_input_de input js_brand" value="" id='js_brand'>
-            <ul class="listExample" id='list_brand'>
+            <input type="text" class="js_input_de input js_brand02 js_single" value="" id='js_brand02' autocomplete="off">
+            <ul class="listExample" id='list_brand02'>
                 
             </ul>
         </div>
@@ -41,7 +48,7 @@
                 <div class="listSelected">
                     
                 </div>
-                <input type="text" class="multi_input input js_input_de js_title" value="" id='js_title' style="width: 100%;background-color: #ff0;">
+                <input type="text" class="multi_input input js_input_de js_title" value="" id='js_title' style="width: 100%;background-color: #ff0;" autocomplete="off">
                 
                 <ul class="listExample" id='list_title'>
                     <!-- <li class="js_item_multi items"><span class="text">111</span></li>
@@ -49,6 +56,25 @@
                     <li class="js_item_multi items"><span class="text">333</span></li> -->
                 </ul>
             </div>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px; font-size: 0; text-align: left;">
+        <div class="box_select">
+            <select class="select js_select js_select_year required">
+                <option value="">=YEAR=</option>                
+            </select>
+        </div>
+        <div class="box_select">
+            <select class="select js_select js_select_month required">
+                <option value="">=MONTH=</option>                
+            </select>
+        </div>
+        <!-- <div class="box_select js_box_date" style="opacity: 0;" > -->
+        <div class="box_select js_box_date" style="display: none;" >
+            <select class="select js_select js_select_date required" disabled="disabled">
+                <option value="">=DAY=</option>                
+            </select>
         </div>
     </div>
 </body>

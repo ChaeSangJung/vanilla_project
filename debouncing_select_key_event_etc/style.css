@@ -15,3 +15,5 @@ ul {width: 250px;}
 /* .item_multi_selected + .item_multi_selected {margin-left: 5px;} */
 .items {position: relative;font-size: 14px;}
 .text_no_result {position: absolute;top: 0;right: 0;font-size: 14px;}
+
+.box_select {display: inline-block;font-size: 15px;}
