@@ -87,13 +87,18 @@ window.addEventListener('keyup', function(event){
                 hidden_value.value = text;
                 temp_value.value = input_temp; // input_temp inputed keyword
                 
-            } else if(staM !== null) { // multi input
+            } else if(staM !== null) { // multi input                
                 const wrap = staM.closest('.wrapItems');
                 const listSelected = wrap.querySelector('.listSelected');
                 const text = staM.querySelector('.text').innerText;                
                 const pendingElement = createList(text, listSelected);
+                const limit_num = parseInt(on.dataset.num);
+                if(limit_num === listSelected.children.length) {
+                    alert(limit_num + '까지 선택할 수 있습니다.')
+                } else if(listSelected.children.length < limit_num){
+                    listSelected.appendChild(pendingElement);
+                }
 
-                listSelected.appendChild(pendingElement);
                 handleInput(wrap);
 
                 const listExample = wrap.querySelector('.listExample');
@@ -172,13 +177,20 @@ function createList(text, listSelected){
 function onListMultiClick(js_item_multies){ // multi type list click function
     js_item_multies.forEach(function(js_item_multi){
         js_item_multi.addEventListener('click',function(event){
+            const on = document.querySelector('.on');
             const wrap = event.currentTarget.closest('.wrapItems');
             const listSelected = wrap.querySelector('.listSelected');        
             const target = event.currentTarget;
             const text = target.querySelector('.text').innerText;
             const pendingElement = createList(text, listSelected);
+            const num = parseInt(on.dataset.num);
             
-            listSelected.appendChild(pendingElement);
+            if(listSelected.children.length == num) {
+                alert(num + '까지 선택할 수 있습니다.')
+            } else if(listSelected.children.length < num){
+                listSelected.appendChild(pendingElement);
+            }
+
             handleInput(wrap);
             
             const listExample = wrap.querySelector('.listExample');
@@ -203,13 +215,27 @@ const api = axios.create({
     }
 });
 
+// const params = new URLSearchParams()
+// params.append('query', encodeURIComponent('aa'))
+// params.append('api_key', "ee424dad1a8fdd9ad4a5e461b503e8b7")
+// params.append('language', "en-US")
+// params.append('visual', 'xx01')
+// params.append('visual', 'xx02')
+// params.append('visual', 'xx03')
+// params.append('visual', 'xx03')
+
+
 const moviesApi = {
-    search: term =>
+    // search: term =>
+    //     api.get("search/movie", {
+    //     params: params,
+    // }),
+    search : (term) => 
         api.get("search/movie", {
         params: {
             query: encodeURIComponent(term)
         }
-    }),
+    })
 };
 
 const CompaniesApi = {
@@ -220,6 +246,11 @@ const CompaniesApi = {
         }
     })
 }
+
+// search/collection
+// search/keyword
+// search/person
+// search/tv
 
 // debunce function
 let debounceCheck;
@@ -282,14 +313,14 @@ const painter = (answers, id, listExample, obj) => { // painting lists
         let type_val;
         if(id === 'js_brand' || id === 'js_brand02') { // single input example
             type_val = 'single';            
-        } else if(id === 'js_title'){ // multi input example
+        } else if(id === 'js_title' || id === 'js_title02'){ // multi input example
             type_val = 'multi';
         }
         if(answers.length !== 0) {
             answers.forEach(function(answer){                
                 if(id === 'js_brand' || id === 'js_brand02'){ // single input example
                     onCreateList(answer.original_title, listExample, type_val); // creating lists
-                } else if(id === 'js_title'){ // multi input example
+                } else if(id === 'js_title' || id === 'js_title02'){ // multi input example
                     onCreateList(answer.name, listExample, type_val); // creating lists
                 }
             });            
@@ -300,7 +331,11 @@ const painter = (answers, id, listExample, obj) => { // painting lists
         const js_items = Array.from(listExample.querySelectorAll('.js_item')); // single type Lists
         const js_item_multies = Array.from(listExample.querySelectorAll('.js_item_multi')); // multi type Lists        
         onListClick(js_items); // single type list click function
-        onListMultiClick(js_item_multies); // multi type list click function
+        if(id === 'js_title') {
+            onListMultiClick(js_item_multies); // multi type list click function
+        } else if(id === 'js_title02'){
+            onListMultiClick(js_item_multies); // multi type list click function
+        }
     }
 }
 const getDataFromURL = async (obj ,id, listExample) => { // call API
@@ -310,7 +345,7 @@ const getDataFromURL = async (obj ,id, listExample) => { // call API
                 data: { results: movieResults }
             } = await moviesApi.search(obj);
             answers = movieResults;
-        } else if(id === 'js_title'){ // multi types
+        } else if(id === 'js_title' || id === 'js_title02'){ // multi types
             const {
                 data: { results: companyResults }
             } = await CompaniesApi.search(obj);    
@@ -527,6 +562,43 @@ function getDateSelect() {
 function init(){
     getDateSelect();
 }
+
+// var testValue = 'This is the Cookbook'; 
+// var subValue = 'Cook'; 
+// var iValue = testValue.indexOf(subValue); 
+// console.log(iValue); 
+// // String 객체의 indexOf 메서드는 인덱스 혹은 부분 문자열의 첫 번째 글자가 있는 위치를 나타내는 숫자를 반환하고, 문자열에서 첫 번째 
+// // 문자의 인덱스는 0 입니다. 
+// // 부분 문자열이 대상 문자열 안에 있는지 없는지 확인하기 위해서는 반환되는 값이 -1 인지 살펴보면 됩니다 
+// if (iValue != -1) { 
+//     console.log('찾고자 하는 부분 문자열이 있습니다.'); 
+// } 
+// // indexOf 메서드는 두 개의 인자를 갖습니다.
+// // 첫 번째 인자는 찾고자 하는 부분 문자열이고, 두 번째 인자는 검색을 시작할 위치의 인덱스 값입니다. 
+// // 두 번째 인자는 생략 가능합니다. 
+// var str = 'Have you had a dinner?'; 
+// var subStr = 'dinner'; 
+// var iVal = str.indexOf(subStr, 8); 
+// console.log(iVal); 
+// // 15 => 부분 문자열의 인덱스 15를 반환 
+// // indexOf 메서드는 왼쪽에서 오른쪽으로 탐색합니다. 그러나 때로는 문자열을 오른쪽에서 왼쪽으로 탐색하고 싶을 때가 있습니다. 
+// // 이럴 경우에는 String 객체의 또 다른 메서드인 lastIndexOf 를 사용하면 됩니다. 
+// // lastIndexOf 는 가장 마지막에 나타난 부분 문자열의 인덱스 위치를 반환합니다. 
+// var testStr = 'I have been there'; 
+// var findStr = 'been'; 
+// var findIndex = testStr.lastIndexOf(findStr); 
+// console.log(findIndex); 
+// // 7 
+// // lastIndexOf 의 두 번째 인수는 indexOf 에서와 마찬가지로 생략할 수 있으며, 검색 시작 위치를 전달 받습니다. 
+// // 검색을 시작할 위치는 오른쪽 부터 셈한 값입니다. 
+// console.log(testStr.lastIndexOf('have', 5)); 
+// // 2 
+// console.log(testStr.lastIndexOf('there', 7)); 
+// // -1 반환, 찾지 못함 
+// // 7인 인덱스 위치에서 오른쪽 부터 검색하므로 찾지 못함 
+// // 즉,인덱스 7 의 위치에서 'I have b' 의 b 위치부터 오른쪽에서 왼쪽으로 검색하기 때문에 찾고자 하는 문자열이 없어서 -1 을 반환
+
+// // 출처: https://webclub.tistory.com/568 [Web Club]
 
 
 init();
