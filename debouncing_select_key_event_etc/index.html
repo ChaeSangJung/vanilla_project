@@ -13,9 +13,11 @@
     <div>
         <input type="hidden" value="" id='js_brand_value' class="input_state">
         <input type="hidden" value="" id='js_brand02_value' class="input_state">
+        <input type="hidden" value="" id='js_person_value' class="input_state">
         
         <input type="hidden" value="" id='js_brand_temp' class="input_temp">
         <input type="hidden" value="" id='js_brand02_temp' class="input_temp">
+        <input type="hidden" value="" id='js_person_temp' class="input_temp">
     </div>
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
@@ -69,9 +71,7 @@
                 <input type="text" class="multi_input input js_input_de js_title" value="" id='js_title02' style="width: 100%;background-color: #ff0;" autocomplete="off" data-num="5">
                 
                 <ul class="listExample">
-                    <!-- <li class="js_item_multi items"><span class="text">111</span></li>
-                    <li class="js_item_multi items"><span class="text">222</span></li>
-                    <li class="js_item_multi items"><span class="text">333</span></li> -->
+                    <!-- <li class="js_item_multi items"><span class="text">111</span></li> -->
                 </ul>
             </div>
         </div>
@@ -93,6 +93,21 @@
             <select class="select js_select js_select_date required" disabled="disabled">
                 <option value="">=DAY=</option>                
             </select>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>debouncing</h2>
+        <div class="wrapItems">        
+            <input type="text" class="js_input_de input js_person js_single js_with_img" value="" id='js_person' autocomplete="off">
+            <ul class="listExample listWithImg" id='list_person'>                
+                <!-- <li class="js_item_img items items_img">
+                    <div class="wrap_img">
+                        <img src='./img/sample.jpg' alt='example_2' />
+                    </div>
+                    <p class="text">example_2</p>
+                </li> -->
+            </ul>
         </div>
     </div>
 </body>

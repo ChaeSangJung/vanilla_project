@@ -5,6 +5,8 @@ ul {width: 250px;}
 .wrapItems + .wrapItems {margin-top: 30px;}
 .listExample {z-index:5;overflow:hidden;position: absolute;max-height: 0;top: 30px;background: #fff;}
 .listExample.active {max-height: 600px;}
+.listExample.listWithImg {overflow-y: scroll;}
+.listExample.listWithImg.active {max-height: 570px;}
 .multi_inner {width: 250px;font-size: 0;border: 1px solid #333;box-sizing: border-box;}
 .multi_inner .listSelected {display: inline-block;font-size: 0;text-align: left;}
 .multi_inner input {display: inline-block; border: none;}
@@ -14,6 +16,10 @@ ul {width: 250px;}
 .item_multi_selected .btn_del {display: inline-block;font-size: 14px;color: tomato;border: none;background: transparent;}
 /* .item_multi_selected + .item_multi_selected {margin-left: 5px;} */
 .items {position: relative;font-size: 14px;}
+.items .wrap_img {width: 100px;}
+.items .wrap_img + .text {margin-top: 5px;}
+.items .wrap_img img {width: 100%;}
+.items_img {padding: 10px 0 10px; box-sizing: border-box;}
 .text_no_result {position: absolute;top: 0;right: 0;font-size: 14px;}
 
 .box_select {display: inline-block;font-size: 15px;}

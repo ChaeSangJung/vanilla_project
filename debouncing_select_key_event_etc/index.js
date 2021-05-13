@@ -73,10 +73,23 @@ window.addEventListener('keyup', function(event){
             } 
         }
     }
+    // scroll event
+    if (event.keyCode === 38 || (event.keyCode === 40)) {
+        const on = document.querySelector('.on'); // selected input text all type.
+        const forty = on.nextElementSibling.querySelector('.focus');
+
+        if(on.nextElementSibling.classList.contains('active') && on.nextElementSibling.classList.contains('listWithImg')) {
+            if(forty !== null){
+                let p_num = forty.offsetTop - on.nextElementSibling.clientHeight + forty.clientHeight;
+                on.nextElementSibling.scrollTop = p_num;
+            }
+        }
+    }
     if (event.keyCode === 13) { // enter key ↳
         const on = document.querySelector('.on');
         const stad = on.nextElementSibling.querySelector('.js_item.focus'); // single type selected
         const staM = on.nextElementSibling.querySelector('.js_item_multi.focus'); // multi type selected
+
         const hidden_value = document.getElementById(`${notice_id}_value`); // when not selecting(enter event), value
         const temp_value = document.getElementById(`${notice_id}_temp`); // when not selecting(enter event), keyword
         
@@ -110,7 +123,7 @@ window.addEventListener('keyup', function(event){
                     }
                 }
                 wrap.querySelector('.multi_input').value = '';
-            }
+            } 
         }
         // multi 
         // ul > li 싹 지우고, on에 value 지운다. blur는 하지 마라.
@@ -128,12 +141,14 @@ function onListClick(js_items){ // single type list click function
             const temp_value = document.getElementById(`${notice_id}_temp`); // when not selecting(enter event), keyword
             const wrap = event.currentTarget.closest('.wrapItems');
             const items = wrap.querySelectorAll('.focus');
+            
             if(items.length > 0){
                 for(i=0; i<items.length; i++){
                     items[i].classList.remove('focus');
                 }
             }
-            js_item.classList.add('focus');
+            // js_item.classList.add('focus');
+            event.currentTarget.classList.add('focus');
             hidden_value.value = event.currentTarget.querySelector('.text').innerText;
             temp_value.value = input_temp;
             wrap.querySelector('.input').value = event.currentTarget.querySelector('.text').innerText;
@@ -215,20 +230,23 @@ const api = axios.create({
     }
 });
 
-// const params = new URLSearchParams()
-// params.append('query', encodeURIComponent('aa'))
-// params.append('api_key', "ee424dad1a8fdd9ad4a5e461b503e8b7")
-// params.append('language', "en-US")
-// params.append('visual', 'xx01')
-// params.append('visual', 'xx02')
-// params.append('visual', 'xx03')
-// params.append('visual', 'xx03')
-
+// 아래와 같이 array를 이용한 params setting은 axios.create에서 설정한 params를 덮는다.
+// 공통된 params도 같이 넣어 줘야 함
+// axios.create은 baseURL만 남기고
+// 공통된 params를 따로 빼서 관리!!
+// const xparams = new URLSearchParams()
+// xparams.append('query', encodeURIComponent('aa'))
+// xparams.append('api_key', "ee424dad1a8fdd9ad4a5e461b503e8b7")
+// xparams.append('language', "en-US")
+// xparams.append('visual', 'xx01')
+// xparams.append('visual', 'xx02')
+// xparams.append('visual', 'xx03')
+// xparams.append('visual', 'xx03')
 
 const moviesApi = {
     // search: term =>
     //     api.get("search/movie", {
-    //     params: params,
+    //     params: xparams,
     // }),
     search : (term) => 
         api.get("search/movie", {
@@ -238,7 +256,7 @@ const moviesApi = {
     })
 };
 
-const CompaniesApi = {
+const companiesApi = {
     search: term =>
         api.get('search/company', {
         params: {
@@ -247,9 +265,17 @@ const CompaniesApi = {
     })
 }
 
+const personApi = {
+    search: term => 
+        api.get('search/person', {
+        params: {
+            query: encodeURIComponent(term)
+        }
+    })
+}
+
 // search/collection
 // search/keyword
-// search/person
 // search/tv
 
 // debunce function
@@ -265,19 +291,58 @@ const debounce = (callback, milliseconds) => {
 }
 
 // creating lists
-const onCreateList = (text, list, type) => {
+const onCreateList = (text, list, type, id) => {
     let li = document.createElement('li');
     let span = document.createElement('span');
     
     span.innerText = text;
     if(type === 'single') {
-        li.className = 'js_item items'; // single type Lists
+        if(text === document.getElementById(`${id}_value`).value){
+            li.className = 'js_item focus items';
+        } else {
+            li.className = 'js_item items';
+        }
     } else {
         li.className = 'js_item_multi items'; // multi type Lists
     }
     span.className = 'text';
     
     li.appendChild(span);
+    list.appendChild(li);
+}
+
+// creating list with img
+const onCreateListImg = (img, name, list, type, id) => {
+    // console.log(img, name, list, type);
+    let li = document.createElement('li');
+    let div = document.createElement('div');
+    let profile = document.createElement('img');
+    let p = document.createElement('p');
+
+    if(img === null){
+        profile.setAttribute('src', `./img/no_person.png`);
+        profile.setAttribute('alt', 'no image');
+    } else {
+        profile.setAttribute('src', `https://image.tmdb.org/t/p/w300${img}`);
+        profile.setAttribute('alt', name);
+    }
+    p.innerText = name;
+
+    if(type === 'single') {
+        if(name === document.getElementById(`${id}_value`).value){
+            li.className = 'js_item items focus items_img';
+        } else {
+            li.className = 'js_item items items_img';
+        }
+    } else {
+        li.className = 'js_item_multi items items_img';
+    }
+    div.className = 'wrap_img';
+    p.className = 'text';
+
+    div.appendChild(profile);
+    li.appendChild(div);
+    li.appendChild(p);
     list.appendChild(li);
 }
 
@@ -311,7 +376,7 @@ const painter = (answers, id, listExample, obj) => { // painting lists
 
     if(listExample.children.length === 0) {
         let type_val;
-        if(id === 'js_brand' || id === 'js_brand02') { // single input example
+        if(id === 'js_brand' || id === 'js_brand02' || id === 'js_person') { // single input example
             type_val = 'single';            
         } else if(id === 'js_title' || id === 'js_title02'){ // multi input example
             type_val = 'multi';
@@ -319,9 +384,12 @@ const painter = (answers, id, listExample, obj) => { // painting lists
         if(answers.length !== 0) {
             answers.forEach(function(answer){                
                 if(id === 'js_brand' || id === 'js_brand02'){ // single input example
-                    onCreateList(answer.original_title, listExample, type_val); // creating lists
+                    onCreateList(answer.original_title, listExample, type_val, id); // creating lists
                 } else if(id === 'js_title' || id === 'js_title02'){ // multi input example
-                    onCreateList(answer.name, listExample, type_val); // creating lists
+                    onCreateList(answer.name, listExample, type_val, id); // creating lists
+                }
+                else if(id === 'js_person'){ // list with img                    
+                    onCreateListImg(answer.profile_path, answer.name, listExample, type_val, id);
                 }
             });            
         }
@@ -330,10 +398,10 @@ const painter = (answers, id, listExample, obj) => { // painting lists
 
         const js_items = Array.from(listExample.querySelectorAll('.js_item')); // single type Lists
         const js_item_multies = Array.from(listExample.querySelectorAll('.js_item_multi')); // multi type Lists        
-        onListClick(js_items); // single type list click function
-        if(id === 'js_title') {
-            onListMultiClick(js_item_multies); // multi type list click function
-        } else if(id === 'js_title02'){
+        if(id === 'js_brand' || id === 'js_brand02' || id === 'js_person'){
+            onListClick(js_items); // single type list click function
+        }
+        if(id === 'js_title' || id === 'js_title02') {
             onListMultiClick(js_item_multies); // multi type list click function
         }
     }
@@ -348,8 +416,13 @@ const getDataFromURL = async (obj ,id, listExample) => { // call API
         } else if(id === 'js_title' || id === 'js_title02'){ // multi types
             const {
                 data: { results: companyResults }
-            } = await CompaniesApi.search(obj);    
+            } = await companiesApi.search(obj);    
             answers = companyResults;
+        } else if(id === 'js_person') {
+            const {
+                data: {results: personResults}
+            } = await personApi.search(obj);
+            answers = personResults;
         }
         painter(answers ,id, listExample, obj); // painting lists
         
@@ -382,8 +455,8 @@ inputVals.forEach(function(inputVal){
 });
 
 // 특정 영역 외 클릭 
-function clickBodyEvent(event) {
-    const input_states = Array.from(document.querySelectorAll('.input_state'));
+function clickBodyEvent(event) {    
+    const input_states = Array.from(document.querySelectorAll('.input_state'));    
     const input_ones = Array.from(document.querySelectorAll('.input.on'));    
     const target = event.target;    
     // input 이면 pass
@@ -430,7 +503,7 @@ function clickBodyEvent(event) {
     });
 
     input_states.forEach(function(input_state){
-        const input_id = `${input_state.getAttribute('id').split('_')[0]}_${input_state.getAttribute('id').split('_')[1]}`
+        const input_id = `${input_state.getAttribute('id').split('_')[0]}_${input_state.getAttribute('id').split('_')[1]}`        
         const js_input = document.getElementById(`${input_id}`);
         js_input.value = input_state.value;
     });
