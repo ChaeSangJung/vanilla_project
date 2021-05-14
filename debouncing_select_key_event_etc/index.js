@@ -7,18 +7,30 @@ const js_item_multies = Array.from(document.querySelectorAll('.js_item_multi'));
 const body = document.querySelector("body");
 
 let notice_id; // saving input single type id
-let input_temp; // temporary saving input single type value
+
+// temporary saving input single type search keyword
+let input_single_results = inputs.filter(input => input.classList.contains('js_single'));
+let input_single_ids = input_single_results.map(word => word.id)
+let render_inputs = {};
+
+function render_input_temps() {
+    for(i=0; input_single_ids.length > i; i++){
+        render_inputs[`${input_single_ids[i]}`] = '';
+    }
+}
 
 inputs.forEach(function(input){    
     input.addEventListener('click',function(event){
-        notice_id = event.target.getAttribute('id');
-        
+        notice_id = event.target.getAttribute('id');        
         const ons = Array.from(document.querySelectorAll('.on')); // selected input text all type.
         const actives = Array.from(document.querySelectorAll('.active')); // shown list
         
         // reset
         for (i=0; i<ons.length;i++){            
             ons[i].classList.remove('on');
+            if(ons[i].classList.contains('js_multi')){
+                ons[i].value = '';
+            }
         }
         
         for (i=0; i<actives.length;i++){
@@ -35,10 +47,26 @@ inputs.forEach(function(input){
     });
 });
 
+window.addEventListener('keydown', function(event){
+    const on = document.querySelector('.on'); // selected input text all type.    
+    if(event.keyCode === 8 && on !== null){
+        console.log(on.value,on.selectionStart)
+        // value값이 있지만 위치는 맨 앞일 경우
+        if(on.value && on.selectionStart === 0){
+            console.log(on.previousElementSibling)
+            // 마지막 거 focus 한번 더 누르면 지우면서 다음 거 focus
+        }
+        // value값이 없는 경우
+        if(on.value === ''){
+            console.log(on.previousElementSibling)
+            // 마지막 거 focus 한번 더 누르면 지우면서 다음 거 focus
+        }
+    }
+});
 window.addEventListener('keyup', function(event){
-    if(event.keyCode === 40) { // Down Arrow key ↓
-        const on = document.querySelector('.on'); // selected input text all type.
-        
+    const on = document.querySelector('.on'); // selected input text all type.
+    
+    if(event.keyCode === 40 && on !== null) { // Down Arrow key ↓        
         if(on.nextElementSibling.classList.contains('active')){
             const arr_li = Array.from(on.nextElementSibling.querySelectorAll('.focus')); // focused list
             const items = Array.from(on.nextElementSibling.querySelectorAll('.js_item')); // all single type list
@@ -59,9 +87,7 @@ window.addEventListener('keyup', function(event){
         }
     }
     
-    if (event.keyCode === 38){ // Up Arrow key ↑
-        const on = document.querySelector('.on'); // selected input text all type.
-        
+    if (event.keyCode === 38 && on !== null){ // Up Arrow key ↑
         if(on.nextElementSibling.classList.contains('active')){
             const forty = on.nextElementSibling.querySelector('.focus');
             
@@ -74,8 +100,7 @@ window.addEventListener('keyup', function(event){
         }
     }
     // scroll event
-    if (event.keyCode === 38 || (event.keyCode === 40)) {
-        const on = document.querySelector('.on'); // selected input text all type.
+    if ((event.keyCode === 38 || event.keyCode === 40) && on !== null) {
         const forty = on.nextElementSibling.querySelector('.focus');
 
         if(on.nextElementSibling.classList.contains('active') && on.nextElementSibling.classList.contains('listWithImg')) {
@@ -85,8 +110,7 @@ window.addEventListener('keyup', function(event){
             }
         }
     }
-    if (event.keyCode === 13) { // enter key ↳
-        const on = document.querySelector('.on');
+    if (event.keyCode === 13 && on !== null) { // enter key ↳
         const stad = on.nextElementSibling.querySelector('.js_item.focus'); // single type selected
         const staM = on.nextElementSibling.querySelector('.js_item_multi.focus'); // multi type selected
 
@@ -98,7 +122,7 @@ window.addEventListener('keyup', function(event){
                 const text = stad.querySelector('.text').innerText;
                 on.value = text;
                 hidden_value.value = text;
-                temp_value.value = input_temp; // input_temp inputed keyword
+                temp_value.value = render_inputs[`${notice_id}`];
                 
             } else if(staM !== null) { // multi input                
                 const wrap = staM.closest('.wrapItems');
@@ -129,14 +153,12 @@ window.addEventListener('keyup', function(event){
         // ul > li 싹 지우고, on에 value 지운다. blur는 하지 마라.
         // on.blur();
     }
-    if (event.keyCode === 8) { // backspace
-        // multi일 때, 한번 누르면 나중에 입력한 값 포커스 한번 더 누르면 지운다.
-    }
 });
 
 function onListClick(js_items){ // single type list click function
     js_items.forEach(function(js_item){
         js_item.addEventListener('click', function(event){
+            console.log(notice_id)
             const hidden_value = document.getElementById(`${notice_id}_value`); // when not selecting(enter event), value
             const temp_value = document.getElementById(`${notice_id}_temp`); // when not selecting(enter event), keyword
             const wrap = event.currentTarget.closest('.wrapItems');
@@ -150,7 +172,7 @@ function onListClick(js_items){ // single type list click function
             // js_item.classList.add('focus');
             event.currentTarget.classList.add('focus');
             hidden_value.value = event.currentTarget.querySelector('.text').innerText;
-            temp_value.value = input_temp;
+            temp_value.value = render_inputs[`${notice_id}`];
             wrap.querySelector('.input').value = event.currentTarget.querySelector('.text').innerText;
             wrap.querySelector('.listExample').classList.remove('active');
         })
@@ -269,7 +291,7 @@ const personApi = {
     search: term => 
         api.get('search/person', {
         params: {
-            query: encodeURIComponent(term)
+            query: encodeURIComponent(term),
         }
     })
 }
@@ -418,7 +440,7 @@ const getDataFromURL = async (obj ,id, listExample) => { // call API
                 data: { results: companyResults }
             } = await companiesApi.search(obj);    
             answers = companyResults;
-        } else if(id === 'js_person') {
+        } else if(id === 'js_person') { // with image
             const {
                 data: {results: personResults}
             } = await personApi.search(obj);
@@ -448,7 +470,7 @@ inputVals.forEach(function(inputVal){
         const id_value = target.id;
         const listExample = target.nextElementSibling;        
         if(target.value !== '' && event.keyCode !== 13 && event.keyCode !== 37 && event.keyCode !== 38 && event.keyCode !== 39 && event.keyCode !== 40) {
-            input_temp = target.value;
+            render_inputs[`${notice_id}`] = target.value;
             getDataFromURL(target.value, id_value, listExample); // call API
         }
     },500));
@@ -457,7 +479,7 @@ inputVals.forEach(function(inputVal){
 // 특정 영역 외 클릭 
 function clickBodyEvent(event) {    
     const input_states = Array.from(document.querySelectorAll('.input_state'));    
-    const input_ones = Array.from(document.querySelectorAll('.input.on'));    
+    const input_ones = Array.from(document.querySelectorAll('.input.on'));
     const target = event.target;    
     // input 이면 pass
     const inputTags = event.currentTarget.querySelectorAll(".input");
@@ -488,10 +510,10 @@ function clickBodyEvent(event) {
     })
 
     input_ones.forEach(function(input_on){
-        if(input_on.classList.contains('js_single')){
-            const temp_id = input_on.getAttribute('id');
+        const temp_id = input_on.getAttribute('id');
+        
+        if(input_on.classList.contains('js_single')){            
             temp_input = document.getElementById(`${temp_id}_temp`);
-
             if(temp_input.value !==''){
                 getDataFromURL(temp_input.value, temp_id, document.getElementById(`${temp_id}`).nextElementSibling);
             } else if(document.getElementById(`${temp_id}`).nextElementSibling.children.length !== 0){
@@ -499,7 +521,16 @@ function clickBodyEvent(event) {
                     document.getElementById(`${temp_id}`).nextElementSibling.removeChild(document.getElementById(`${temp_id}`).nextElementSibling.firstChild);
                 }
             }
-        }        
+        } else if(input_on.classList.contains('js_multi')){
+            if(input_on.value !== '') {
+                input_on.value = '';
+            }
+            if(document.getElementById(`${temp_id}`).nextElementSibling.children.length !== 0){
+                while (document.getElementById(`${temp_id}`).nextElementSibling.firstChild) {
+                    document.getElementById(`${temp_id}`).nextElementSibling.removeChild(document.getElementById(`${temp_id}`).nextElementSibling.firstChild);
+                }
+            }
+        }
     });
 
     input_states.forEach(function(input_state){
@@ -560,7 +591,7 @@ function getSelectDate(date, len){
     for(i=1; i<=date; i++){
         const select_opt = document.createElement('option');
         select_opt.innerText = `${i}일`;
-        select_opt.value = `${i < 10 ? '0' + i : i }`;
+        select_opt.value = `${i < 10 ? '0' + i : `${i}` }`;
         js_select_date.appendChild(select_opt);
     }
 };
@@ -585,7 +616,7 @@ function onAllThatDate(year, month, now) {
     const js_box_date = document.querySelector('.js_box_date');
     let temp_span = '';
     
-    if(year !== '', month !== ''){
+    if(year !== '' && month !== ''){
         temp_span = getDateSapn(now, year, month);
         if(temp_span >= -3 && temp_span <= 1) {            
             js_box_date.style.display = 'inline-block';
@@ -634,6 +665,7 @@ function getDateSelect() {
 
 function init(){
     getDateSelect();
+    render_input_temps();
 }
 
 // var testValue = 'This is the Cookbook'; 
@@ -672,6 +704,11 @@ function init(){
 // // 즉,인덱스 7 의 위치에서 'I have b' 의 b 위치부터 오른쪽에서 왼쪽으로 검색하기 때문에 찾고자 하는 문자열이 없어서 -1 을 반환
 
 // // 출처: https://webclub.tistory.com/568 [Web Club]
+
+// 전역변수를 설정하는 거라면
+// window["age"+i] = $("#age"+i).attr("value");
+// 처럼 하면 됩니다.
+// (기본적으로 전부 window 에 속함)
 
 
 init();
