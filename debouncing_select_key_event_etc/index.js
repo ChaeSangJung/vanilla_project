@@ -24,6 +24,7 @@ inputs.forEach(function(input){
         notice_id = event.target.getAttribute('id');        
         const ons = Array.from(document.querySelectorAll('.on')); // selected input text all type.
         const actives = Array.from(document.querySelectorAll('.active')); // shown list
+        const item_multi_pre_selecteds = Array.from(document.querySelectorAll('.item_multi_selected.x'))
         
         // reset
         for (i=0; i<ons.length;i++){            
@@ -31,6 +32,14 @@ inputs.forEach(function(input){
             if(ons[i].classList.contains('js_multi')){
                 ons[i].value = '';
             }
+        }
+
+        // multi selecting reset
+        if(item_multi_pre_selecteds.length > 0) {
+            item_multi_pre_selecteds.forEach(function(item_multi_pre_selected){
+                console.log(item_multi_pre_selected)
+                item_multi_pre_selected.classList.remove('x');
+            })
         }
         
         for (i=0; i<actives.length;i++){
@@ -47,19 +56,48 @@ inputs.forEach(function(input){
     });
 });
 
-window.addEventListener('keydown', function(event){
-    const on = document.querySelector('.on'); // selected input text all type.    
-    if(event.keyCode === 8 && on !== null){
-        console.log(on.value,on.selectionStart)
-        // value값이 있지만 위치는 맨 앞일 경우
-        if(on.value && on.selectionStart === 0){
-            console.log(on.previousElementSibling)
-            // 마지막 거 focus 한번 더 누르면 지우면서 다음 거 focus
+window.addEventListener('keydown', function(event){    
+    const on = document.querySelector('.on'); // selected input text all type.
+    const wrap = on.closest('.wrapItems');
+    if(event.keyCode === 8 && on !== null && on.classList.contains('js_multi')){ // backspace
+        const multi_list =  on.previousElementSibling;
+        
+        if(multi_list.children.length > 0) {
+            if(multi_list.lastElementChild.classList.contains('x')){
+                const elem = multi_list.querySelector('.x');
+                elem.remove();
+                handleInput(wrap);
+                if(multi_list.children.length === 0) {
+                    on.focus();
+                }
+            }
+    
+            // value값이 있지만 위치는 맨 앞일 경우
+            if(on.value && on.selectionStart === 0 && multi_list.lastElementChild !== null){
+                if(!multi_list.lastElementChild.classList.contains('x')) {
+                    multi_list.lastElementChild.classList.add('x');
+                }
+                on.blur();
+            }
+            // value값이 없는 경우
+            if(on.value === '' && multi_list.lastElementChild !== null){
+                if(!multi_list.lastElementChild.classList.contains('x')) {
+                    multi_list.lastElementChild.classList.add('x');
+                }
+                on.blur();
+            }
         }
-        // value값이 없는 경우
-        if(on.value === ''){
-            console.log(on.previousElementSibling)
-            // 마지막 거 focus 한번 더 누르면 지우면서 다음 거 focus
+    }
+    if(event.keyCode === 39 && on.classList.contains('js_multi')){ // right arrow key →
+        const multi_list =  on.previousElementSibling;
+        if (multi_list.children.length > 0) {
+            const pre_del_elem = multi_list.lastElementChild.classList.contains('x');
+            if(pre_del_elem) {
+                multi_list.lastElementChild.classList.remove('x');
+                on.focus();
+            }
+        } else {
+            console.log('null');
         }
     }
 });
@@ -615,17 +653,16 @@ function onPaintDate(year, month) {
 function onAllThatDate(year, month, now) {
     const js_box_date = document.querySelector('.js_box_date');
     let temp_span = '';
-    
+
     if(year !== '' && month !== ''){
         temp_span = getDateSapn(now, year, month);
         if(temp_span >= -3 && temp_span <= 1) {            
-            js_box_date.style.display = 'inline-block';
+            js_box_date.style.opacity = 1;
             onPaintDate(year, month);
             js_box_date.querySelector('select').disabled = false;
         } else {
             js_box_date.querySelector('select').disabled = true;
-            js_box_date.style.display = 'none';
-            
+            js_box_date.style.opacity = 0;
         }
     }
 }

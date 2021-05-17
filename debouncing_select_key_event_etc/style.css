@@ -12,6 +12,7 @@ ul {width: 250px;}
 .multi_inner input {display: inline-block; border: none;}
 .multi_inner input:focus{outline: none;}
 .item_multi_selected {display: inline-block;padding: 0 5px;margin-left: 5px;font-size: 0; border: 1px solid #333;box-sizing: border-box;}
+.item_multi_selected.x {background: #f8f8f8;}
 .item_multi_selected .text {display: inline-block;font-size: 14px;}
 .item_multi_selected .btn_del {display: inline-block;font-size: 14px;color: tomato;border: none;background: transparent;}
 /* .item_multi_selected + .item_multi_selected {margin-left: 5px;} */
