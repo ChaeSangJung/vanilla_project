@@ -433,26 +433,41 @@ const getRandomApi = {
     })
 }
 
-const exampleFunc = (arr) => {
-    arr.forEach(function(elm){
-        console.log(elm.alt_description, elm.urls.regular);
+const js_unsplash = document.querySelector('.js_unsplash');
 
+const unsplashCreate = (text, img) => {
+    const li = document.createElement('li');
+    const imgTag = document.createElement('img');
+    const span = document.createElement('span');
+
+    imgTag.src = img;
+    imgTag.alt = text;
+    span.innerText = text;
+    li.appendChild(imgTag);
+    li.appendChild(span);
+    js_unsplash.appendChild(li);
+}
+
+const exampleFunc = (arr) => {    
+    arr.forEach(function(elm){
+        unsplashCreate(elm.alt_description, elm.urls.regular);
     });
 }
 
 const js_btn_ex = document.querySelector('.js_btn_ex');
 js_btn_ex.addEventListener("click", async (event)=>{
     const txt = event.currentTarget.innerText;    
+    let answer = [];
     try{
         const {
             data : { results: others }
         } = await imgApi.search(txt,3);
-        answer = [...others]
+        answer = others;
         exampleFunc(answer)
         // const { data: randoms } = await getRandomApi.search(txt);
 
     } catch {
-        console.log('x')
+        console.log('x');
     }
     
 })
