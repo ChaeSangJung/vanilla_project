@@ -1,17 +1,18 @@
 ul {width: 250px;}    
 .focus {background-color: aquamarine;}
-.input {width: 250px;height: 24px;box-sizing: border-box;}
+.style_input {position: relative;width: 250px;height: 31px;box-sizing: border-box;border: 1px solid #333;}
+.style_input.js_index {z-index: 10;}
 .wrapItems {position: relative;}
 .wrapItems + .wrapItems {margin-top: 30px;}
-.listExample {z-index:5;overflow:hidden;position: absolute;max-height: 0;top: 30px;background: #fff;}
+.listExample {z-index:5;overflow:hidden;position: absolute;max-height: 0;top: 31px;background: #fff;}
 .listExample.active {max-height: 600px;}
 .listExample.listWithImg {overflow-y: scroll;}
 .listExample.listWithImg.active {max-height: 570px;}
-.multi_inner {width: 250px;font-size: 0;border: 1px solid #333;box-sizing: border-box;}
+.multi_inner {position: relative; width: 750px;height:33px;font-size: 0;border: 1px solid #333;box-sizing: border-box;}
 .multi_inner .listSelected {display: inline-block;font-size: 0;text-align: left;}
-.multi_inner input {display: inline-block; border: none;}
+.multi_inner input {display: inline-block; border: none;position: absolute;bottom: 0;right: 0;}
 .multi_inner input:focus{outline: none;}
-.item_multi_selected {display: inline-block;padding: 0 5px;margin-left: 5px;font-size: 0; border: 1px solid #333;box-sizing: border-box;}
+.item_multi_selected {display: inline-block;padding: 0 5px;margin: 5px;font-size: 0; border: 1px solid #333;box-sizing: border-box;}
 .item_multi_selected.x {background: #f8f8f8;}
 .item_multi_selected .text {display: inline-block;font-size: 14px;}
 .item_multi_selected .btn_del {display: inline-block;font-size: 14px;color: tomato;border: none;background: transparent;}
@@ -24,3 +25,40 @@ ul {width: 250px;}
 .text_no_result {position: absolute;top: 0;right: 0;font-size: 14px;}
 
 .box_select {display: inline-block;font-size: 15px;}
+
+.btn_arr {position: absolute;width: 250px;height: 31px;top: 0;left: 0;background: transparent;border: none;cursor: pointer;text-align: left;opacity: 0;}
+.btn_arr.non_empty {background: #f8f8f8;border: 1px solid #333;opacity: 1;}
+
+/* Ripple effect */
+@keyframes materialRipple {
+    0% {
+        transform: translate(-50%, -50%) scale(1)
+    }
+
+    100% {
+        transform: translate(-50%, -50%) scale(var(--material-scale));
+        opacity: 0
+    }
+}
+
+.material-ripple {
+    position: relative;
+    overflow: hidden;    
+  
+    /* Additional */
+    display: inline-block;
+    padding: 10px 20px;
+    color: #000;
+    text-decoration: none;
+    -webkit-tap-highlight-color: transparent;
+    background: #e0e0e0;
+    border-radius: 17px;
+}
+
+.material-ripple .animate {
+    width: 2px;
+    height: 2px;
+    position: absolute;
+    border-radius: 50%;
+    animation: materialRipple 0.3s linear
+}

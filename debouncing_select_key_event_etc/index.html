@@ -14,16 +14,19 @@
         <input type="hidden" value="" id='js_brand_value' class="input_state">
         <input type="hidden" value="" id='js_brand02_value' class="input_state">
         <input type="hidden" value="" id='js_person_value' class="input_state">
+        <input type="hidden" value="" id='js_awardYear_value' class="input_state">
     </div>
     <div>
         <input type="hidden" value="" id='js_brand_temp' class="input_temp">
         <input type="hidden" value="" id='js_brand02_temp' class="input_temp">
         <input type="hidden" value="" id='js_person_temp' class="input_temp">
+        <input type="hidden" value="" id='js_person02_temp' class="input_temp">
+        <input type="hidden" value="" id='js_awardYear_temp' class="input_temp">
     </div>
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
         <div class="wrapItems">        
-            <input type="text" class="js_input_de input js_brand js_single" value="" id='js_brand' autocomplete="off">
+            <input type="text" class="style_input js_input_de input js_brand js_single" value="" id='js_brand' autocomplete="off">
             <ul class="listExample" id='list_brand'>
                 <!-- <li class="js_item items"><span class="text">example_1</span></li>
                 <li class="js_item items"><span class="text">example_2</span></li>
@@ -37,7 +40,7 @@
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
         <div class="wrapItems">        
-            <input type="text" class="js_input_de input js_brand02 js_single" value="" id='js_brand02' autocomplete="off">
+            <input type="text" class="style_input js_input_de input js_brand02 js_single" value="" id='js_brand02' autocomplete="off">
             <ul class="listExample" id='list_brand02'>
                 
             </ul>
@@ -51,7 +54,7 @@
                 <div class="listSelected">
                     
                 </div>
-                <input type="text" class="multi_input input js_input_de js_multi js_title" value="" id='js_title' style="width: 100%;background-color: #ff0;" autocomplete="off"  data-num="3">
+                <input type="text" class="style_input multi_input input js_input_de js_multi js_title" value="" id='js_title' style="width: 100%;background-color: #ff0;" autocomplete="off"  data-num="3">
                 
                 <ul class="listExample">
                     <!-- <li class="js_item_multi items"><span class="text">111</span></li>
@@ -69,7 +72,7 @@
                 <div class="listSelected">
                     
                 </div>
-                <input type="text" class="multi_input input js_input_de js_multi js_title" value="" id='js_title02' style="width: 100%;background-color: #ff0;" autocomplete="off" data-num="5">
+                <input type="text" class="style_input multi_input input js_input_de js_multi js_title" value="" id='js_title02' style="width: 100%;background-color: #ff0;" autocomplete="off" data-num="5">
                 
                 <ul class="listExample">
                     <!-- <li class="js_item_multi items"><span class="text">111</span></li> -->
@@ -99,8 +102,28 @@
 
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
+        <div class="wrapItems">   
+            <div class="multi_inner">
+                <div class="listSelected">
+                    
+                </div>          
+                <input type="text" class="style_input multi_input input js_input_de js_multi js_title js_with_img" value="" id='js_person02' autocomplete="off"  data-num="10000" style="width: 100%;background-color: #ff0;">
+                <ul class="listExample listWithImg" id='list_person02'>
+                    <!-- <li class="js_item_img items items_img">
+                        <div class="wrap_img">
+                            <img src='./img/sample.jpg' alt='example_2' />
+                        </div>
+                        <p class="text">example_2</p>
+                    </li> -->
+                </ul>
+            </div>                 
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>debouncing</h2>
         <div class="wrapItems">        
-            <input type="text" class="js_input_de input js_person js_single js_with_img" value="" id='js_person' autocomplete="off">
+            <input type="text" class="style_input js_input_de input js_person js_single js_with_img" value="" id='js_person' autocomplete="off">
             <ul class="listExample listWithImg" id='list_person'>                
                 <!-- <li class="js_item_img items items_img">
                     <div class="wrap_img">
@@ -111,8 +134,44 @@
             </ul>
         </div>
     </div>
+
+    <div style="margin-top: 20px;">
+        <h2>debouncing X</h2>
+        <div class="wrapItems">        
+            <input type="text" class="style_input js_input_arr js_award_year js_single js_not_focus" value="" id='js_awardYear' autocomplete="off" placeholder="= year =">
+            <ul class="listExample" id='list_awardYear'>
+                <!-- <li class="js_item_arr items"><span class="text">111</span></li>
+                <li class="js_item_arr items"><span class="text">222</span></li>
+                <li class="js_item_arr items"><span class="text">333</span></li>                 -->
+            </ul>
+            <button class="btn_arr js_btn"></button>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>debouncing X</h2>
+        <div class="wrapItems">        
+            <input type="text" class="style_input js_input_arr js_award_name js_single" value="" id='js_awardName' autocomplete="off" placeholder="placeholder">
+            <ul class="listExample" id='list_awardName'>
+                <!-- <li class="js_item_arr items"><span class="text">111</span></li>
+                <li class="js_item_arr items"><span class="text">222</span></li>
+                <li class="js_item_arr items"><span class="text">333</span></li>                 -->
+            </ul>
+            <button class="btn_arr js_btn"></button>
+        </div>
+    </div>
+
+    <!-- 
+    <div style="margin-top: 20px;">
+        <div id="wrapper">
+            <a href="#" class="material-ripple">Click Me!</a>
+            <a href="#" class="material-ripple" data-color="ff99ff">Custom Color</a>
+        </div>
+    </div>
+     -->
 </body>
 </html>
 
 <script src="./index.js"></script>
+<script src="./arr.js"></script>
 
