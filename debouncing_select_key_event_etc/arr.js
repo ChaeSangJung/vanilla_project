@@ -91,12 +91,22 @@ js_input_arres.forEach(function(js_input_arr){
         }
     });
     js_input_arr.addEventListener('keyup', function(event){
-        console.log(award_name_arr.filter(
-                award => award.name.match(
-                    new RegExp(event.currentTarget.value, "i")
-                )
+        const arr_filtered = award_name_arr.filter (
+            award => award.name.match(
+                new RegExp(event.currentTarget.value, "i")
             )
         )
+        console.log(arr_filtered, arr_filtered.length);
+        // reset
+        // create
+        // painting
+
+        // console.log(award_name_arr.filter(
+        //         award => award.name.match(
+        //             new RegExp(event.currentTarget.value, "i")
+        //         )
+        //     )
+        // )
         // const text = document.createElement('span');
     })
 });
@@ -171,9 +181,14 @@ js_btnes.forEach(function(js_btn){
             input.classList.add('js_index');
             input.value = '';
             input.focus();
-            console.log(award_name_arr);
-            // make list
-            console.log(listExample)
+            award_name_arr.forEach(function(arr){
+                // onPainter_type2(arr.name, listExample);
+                console.log(arr.name, listExample);
+                // make list
+                // reset
+                // create
+                // painting
+            });
         }
     })
 });

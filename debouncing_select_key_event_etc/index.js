@@ -392,6 +392,13 @@ const api = axios.create({
     }
 });
 
+const otherApi = axios.create({
+    baseURL: "https://api.unsplash.com/",
+    params: {
+        client_id: "r-ZzHz6OnqIJqU0kQcnIO4Xcps636gLnvXL6AqDsijk",
+    }
+})
+
 // 아래와 같이 array를 이용한 params setting은 axios.create에서 설정한 params를 덮는다.
 // 공통된 params도 같이 넣어 줘야 함
 // axios.create은 baseURL만 남기고
@@ -404,6 +411,56 @@ const api = axios.create({
 // xparams.append('visual', 'xx02')
 // xparams.append('visual', 'xx03')
 // xparams.append('visual', 'xx03')
+
+const imgApi = {
+    search: (term,pages) => 
+    otherApi.get("/search/photos", {
+        params: {
+            query: encodeURIComponent(term),
+            per_page: 20,
+            page: pages,
+        }
+    })
+}
+const getRandomApi = {
+    search: (term) => 
+    otherApi.get("/photos/random", {
+        params: {
+            query: encodeURIComponent(term),
+            count: 20,
+            orientation: "portrait",
+        }
+    })
+}
+
+const exampleFunc = (arr) => {
+    arr.forEach(function(elm){
+        console.log(elm.alt_description, elm.urls.regular);
+
+    });
+}
+
+const js_btn_ex = document.querySelector('.js_btn_ex');
+js_btn_ex.addEventListener("click", async (event)=>{
+    const txt = event.currentTarget.innerText;    
+    try{
+        const {
+            data : { results: others }
+        } = await imgApi.search(txt,3);
+        answer = [...others]
+        exampleFunc(answer)
+        // const { data: randoms } = await getRandomApi.search(txt);
+
+    } catch {
+        console.log('x')
+    }
+    
+})
+
+// const {
+//     data: { results: movieResults }
+// } = await moviesApi.search(obj);
+// answers = movieResults;
 
 const moviesApi = {
     // search: term =>
@@ -897,5 +954,6 @@ Array.from(document.querySelectorAll(".material-ripple")).forEach(a => {
         setTimeout(function () {
             ripple.parentNode.removeChild(ripple)
         }, 500)
+        
     })
 });
