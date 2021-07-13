@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" integrity="sha512-bZS47S7sPOxkjU/4Bt0zrhEtWx0y0CRkhEp8IckzK+ltifIIE9EMIMTuT/mEzoIMewUINruDBIR/jJnbguonqQ==" crossorigin="anonymous"></script>    
+    <link rel="stylesheet" href="./reset.css">
+    <link rel="stylesheet" href="./style.css">
+    <title>Document</title>
+</head>
+<body>
+    <div>
+        <input type="hidden" value="" id='js_person1_value' class="input_value">
+        <input type="hidden" value="" id='js_person2_value' class="input_value">
+    </div>
+    <div>
+        <input type="hidden" value="" id='js_person1_keyword' class="input_keyword">
+        <input type="hidden" value="" id='js_person2_keyword' class="input_keyword">
+    </div>
+    <div>
+        <input type="hidden" value="" id="notice_id" class="">
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>single 2</h2>
+        <div class="wrapItems">        
+            <input type="text" class="style_input js_single js_input" value="" id='js_person2' autocomplete="off">
+            <ul class="listExample">
+            </ul>
+        </div>
+    </div>
+
+    <div style="margin-top: 20px;">
+        <h2>single 1</h2>
+        <div class="wrapItems">        
+            <input type="text" class="style_input js_single js_input" value="" id='js_person1' autocomplete="off">
+            <ul class="listExample">
+                <!-- <li class="js_item_img items items_img">
+                    <div class="wrap_img">
+                        <img src='./img/sample.jpg' alt='example_2' />
+                    </div>
+                    <p class="text">example_2</p>
+                </li> -->
+            </ul>
+        </div>
+    </div>
+</body>
+</html>
+
+<script src="./js/api.js"></script>
+<script src="./js/single_style.js"></script>
+<script src="./js/common.js"></script>
+<script src="./js/key_event.js"></script>

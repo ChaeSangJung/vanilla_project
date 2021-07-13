@@ -1,10 +1,10 @@
 ul {width: 250px;}    
-.focus {background-color: aquamarine;}
+.focus {background-color: #f4f4f4;}
 .style_input {position: relative;width: 250px;height: 31px;box-sizing: border-box;border: 1px solid #333;}
 .style_input.js_index {z-index: 10;}
 .wrapItems {position: relative;}
 .wrapItems + .wrapItems {margin-top: 30px;}
-.listExample {z-index:5;overflow:hidden;position: absolute;max-height: 0;top: 31px;background: #fff;}
+.listExample {z-index:15;overflow:hidden;position: absolute;max-height: 0;top: 31px;background: #fff;border-left: 1px solid #ccc;border-right: 1px solid #ccc;box-sizing: border-box;}
 .listExample.active {max-height: 600px;}
 .listExample.listWithImg {overflow-y: scroll;}
 .listExample.listWithImg.active {max-height: 570px;}
@@ -17,7 +17,8 @@ ul {width: 250px;}
 .item_multi_selected .text {display: inline-block;font-size: 14px;}
 .item_multi_selected .btn_del {display: inline-block;font-size: 14px;color: tomato;border: none;background: transparent;}
 /* .item_multi_selected + .item_multi_selected {margin-left: 5px;} */
-.items {position: relative;font-size: 14px;}
+.items {position: relative;font-size: 14px;padding: 5px 5px 5px;box-sizing: border-box;border-bottom: 1px solid #ccc;cursor: pointer;}
+.items:hover {background-color: #f4f4f4;}
 .items .wrap_img {width: 100px;}
 .items .wrap_img + .text {margin-top: 5px;}
 .items .wrap_img img {width: 100%;}

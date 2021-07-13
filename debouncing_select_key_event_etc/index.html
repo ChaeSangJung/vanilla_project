@@ -23,6 +23,7 @@
         <input type="hidden" value="" id='js_person02_temp' class="input_temp">
         <input type="hidden" value="" id='js_awardYear_temp' class="input_temp">
     </div>
+    
     <div style="margin-top: 20px;">
         <h2>debouncing</h2>
         <div class="wrapItems">        
@@ -138,26 +139,22 @@
     <div style="margin-top: 20px;">
         <h2>debouncing X</h2>
         <div class="wrapItems">        
-            <input type="text" class="style_input js_input_arr js_award_year js_single js_not_focus" value="" id='js_awardYear' autocomplete="off" placeholder="= year =">
+            <input type="text" class="style_input js_input_arr" value="" id='js_awardYear' autocomplete="off" placeholder="= year =">
             <ul class="listExample" id='list_awardYear'>
-                <!-- <li class="js_item_arr items"><span class="text">111</span></li>
-                <li class="js_item_arr items"><span class="text">222</span></li>
-                <li class="js_item_arr items"><span class="text">333</span></li>                 -->
+                <!-- <li class="js_item_arr items">111</li> -->
             </ul>
-            <button class="btn_arr js_btn"></button>
+            <button class="btn_arr js_btn js_award_year"></button>
         </div>
     </div>
 
-    <div style="margin-top: 20px;">
+    <div style="position: relative;margin-top: 20px;z-index: 5;">
         <h2>debouncing X</h2>
         <div class="wrapItems">        
-            <input type="text" class="style_input js_input_arr js_award_name js_single" value="" id='js_awardName' autocomplete="off" placeholder="placeholder">
+            <input type="text" class="style_input js_input_arr" value="" id='js_awardName' autocomplete="off" placeholder="placeholder">
             <ul class="listExample" id='list_awardName'>
-                <!-- <li class="js_item_arr items"><span class="text">111</span></li>
-                <li class="js_item_arr items"><span class="text">222</span></li>
-                <li class="js_item_arr items"><span class="text">333</span></li>                 -->
+                
             </ul>
-            <button class="btn_arr js_btn"></button>
+            <button class="btn_arr js_btn js_award_name"></button>
         </div>
     </div>
 

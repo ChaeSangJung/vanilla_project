@@ -1,0 +1,27 @@
+// 데이터 관리
+  const [memberState, setMemberState] = useState({
+    member: null,
+  });
+  
+  const [timer, setTimer] = useState(0); // 디바운싱 타이머
+
+  const onChangeInputs = async evt => {
+    ...
+    setMemberState({ // client data는 바로 변경
+      member: memberData,
+    });
+    ...
+    // 디바운싱 - 마지막 호출만 적용 (put api)
+    if (timer) {
+      console.log('clear timer');
+      clearTimeout(timer);
+    }
+    const newTimer = setTimeout(async () => {
+      try {
+        await updateMemberById(match.params.id, memberData);
+      } catch (e) {
+        console.error('error', e);
+      }
+    }, 800);
+    setTimer(newTimer);
+  };

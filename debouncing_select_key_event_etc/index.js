@@ -15,6 +15,7 @@ function render_input_temps() {
     for(i=0; input_single_ids.length > i; i++){
         render_inputs[`${input_single_ids[i]}`] = '';        
     }
+    console.log(render_inputs)
 }
 
 inputs.forEach(function(input){    
@@ -104,7 +105,28 @@ window.addEventListener('keydown', function(event){
         }
     }
 });
-window.addEventListener('keyup', function(event){    
+window.addEventListener('keyup', function(event){
+    // call array
+    if(event.target.classList.contains('js_index')) {
+        if(event.keyCode === 40){
+            const lists = event.target.nextElementSibling;
+            const focuses = Array.from(lists.querySelectorAll('.focus'));
+            
+            if(focuses.length === 0){
+                lists.firstElementChild.classList.add('focus');
+            } else {
+                const now_focus = lists.querySelector('.focus');
+                if(now_focus !== null && now_focus.nextElementSibling !== null) {
+                    now_focus.classList.remove('focus');
+                    now_focus.nextElementSibling.classList.add('focus');
+                }
+            }
+        }
+        if (event.keyCode === 13){
+            console.log("enter")
+        }
+    }
+    // call api
     if(!event.target.classList.contains('js_input_arr')){
         const on = document.querySelector('.on'); // selected input text all type.
         if(event.keyCode === 40 && on !== null) { // Down Arrow key ↓            
@@ -186,9 +208,10 @@ window.addEventListener('keyup', function(event){
 
                     // reset
                     if(listExample.children.length !== 0){ 
-                        while (listExample.firstChild) {
-                            listExample.removeChild(listExample.firstChild);            
-                        }
+                        // while (listExample.firstChild) {
+                        //     listExample.removeChild(listExample.firstChild);            
+                        // }
+                        listExample.innerHTML = '';
                     }
                     wrap.querySelector('.multi_input').value = '';
                 } 
@@ -272,7 +295,12 @@ function onListMultiClick(js_item_multies){ // multi type list click function
             const wrap = event.currentTarget.closest('.wrapItems');
             const listSelected = wrap.querySelector('.listSelected');        
             const target = event.currentTarget;
-            const text = target.querySelector('.text').innerText;
+            let text = target.querySelector('.text').innerText;
+            if(text.length === 0 ) {
+                text = 'zero';
+            } else if(text.length > 4 ) {
+                text = text.substr(0,4);
+            }
             const pendingElement = createList(text, listSelected);
             const num = parseInt(on.dataset.num);
             const multi_inner = wrap.querySelector('.multi_inner');
@@ -374,9 +402,10 @@ function onListMultiClick(js_item_multies){ // multi type list click function
             
             // reset
             if(listExample.children.length !== 0){ 
-                while (listExample.firstChild) {
-                    listExample.removeChild(listExample.firstChild);            
-                }
+                // while (listExample.firstChild) {
+                //     listExample.removeChild(listExample.firstChild);            
+                // }
+                listExample.innerHTML = '';
             }
             wrap.querySelector('.multi_input').value = '';
         })
@@ -472,11 +501,6 @@ js_btn_ex.addEventListener("click", async (event)=>{
     
 })
 
-// const {
-//     data: { results: movieResults }
-// } = await moviesApi.search(obj);
-// answers = movieResults;
-
 const moviesApi = {
     // search: term =>
     //     api.get("search/movie", {
@@ -508,15 +532,11 @@ const personApi = {
     })
 }
 
-// search/collection
-// search/keyword
-// search/tv
-
 // debunce function
 let debounceCheck;
 
 const debounce = (callback, milliseconds) => {
-    return function () {        
+    return function () {
         clearTimeout(debounceCheck);
         debounceCheck = setTimeout(() => {
             callback(...arguments);
@@ -547,18 +567,17 @@ const onCreateList = (text, list, type, id) => {
 
 // creating list with img
 const onCreateListImg = (img, name, list, type, id) => {
-    // console.log(img, name, list, type);
     let li = document.createElement('li');
     let div = document.createElement('div');
     let profile = document.createElement('img');
     let p = document.createElement('p');
 
     if(img === null){
-        profile.setAttribute('src', `./img/no_person.png`);
-        profile.setAttribute('alt', 'no image');
+        profile.src='./img/no_person.png';
+        profile.alt='no image';
     } else {
-        profile.setAttribute('src', `https://image.tmdb.org/t/p/w300${img}`);
-        profile.setAttribute('alt', name);
+        profile.src = img;
+        profile.alt = name;
     }
     p.innerText = name;
 
@@ -603,9 +622,10 @@ const onCreateNoResult = (obj, list, type) => {
 
 const painter = (answers, id, listExample, obj) => { // painting lists
     if(listExample.children.length !== 0){ // reset
-        while (listExample.firstChild) {
-            listExample.removeChild(listExample.firstChild);            
-        }
+        // while (listExample.firstChild) {
+        //     listExample.removeChild(listExample.firstChild);            
+        // }
+        listExample.innerHTML = '';
     }
 
     if(listExample.children.length === 0) {
@@ -616,14 +636,15 @@ const painter = (answers, id, listExample, obj) => { // painting lists
             type_val = 'multi';
         }
         if(answers.length !== 0) {
-            answers.forEach(function(answer){                
+            answers.forEach(function(answer){
+                
                 if(id === 'js_brand' || id === 'js_brand02'){ // single input example
                     onCreateList(answer.original_title, listExample, type_val, id); // creating lists
                 } else if(id === 'js_title' || id === 'js_title02'){ // multi input example
                     onCreateList(answer.name, listExample, type_val, id); // creating lists
                 }
-                else if(id === 'js_person' || id === 'js_person02'){ // list with img                    
-                    onCreateListImg(answer.profile_path, answer.name, listExample, type_val, id);
+                else if(id === 'js_person' || id === 'js_person02'){ // list with img
+                    onCreateListImg(answer.urls.regular, answer.alt_description, listExample, type_val, id);
                 }
             });            
         }
@@ -655,7 +676,8 @@ const getDataFromURL = async (obj ,id, listExample) => { // call API
         } else if(id === 'js_person' || id === 'js_person02') { // with image
             const {
                 data: {results: personResults}
-            } = await personApi.search(obj);
+            // } = await personApi.search(obj);
+            } = await imgApi.search(obj, 1);
             answers = personResults;
         }
         painter(answers ,id, listExample, obj); // painting lists
@@ -691,9 +713,7 @@ inputVals.forEach(function(inputVal){
 
 // 특정 영역 외 클릭 
 function clickBodyEvent(event) {    
-    const input_states = Array.from(document.querySelectorAll('.input_state'));    
-    const input_ones = Array.from(document.querySelectorAll('.js_input_de.on'));
-    
+    const input_states = Array.from(document.querySelectorAll('.input_state'));
     const target = event.target;    
     // input 이면 pass
     const inputTags = event.currentTarget.querySelectorAll(".input");
@@ -742,6 +762,9 @@ function clickBodyEvent(event) {
         }
     })
 
+    // input has class on
+    const input_ones = Array.from(document.querySelectorAll('.js_input_de.on'));
+    
     input_ones.forEach(function(input_on){
         const temp_id = input_on.getAttribute('id');
         
@@ -972,3 +995,6 @@ Array.from(document.querySelectorAll(".material-ripple")).forEach(a => {
         
     })
 });
+
+
+// https://yongflix.netlify.app/
